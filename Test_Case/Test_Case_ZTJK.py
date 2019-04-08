@@ -28,7 +28,7 @@ class Test(unittest.TestCase):
         self.chrome_options.add_argument('--headless')
         self.browser = webdriver.Chrome(chrome_options=self.chrome_options)
         self.browser.set_window_size(1920, 1080)
-        self.browser.get("https://cg168778.wornhole1.cn:38043/pc_login")
+        self.browser.get("")
         time.sleep(5)
         self.browser.find_element_by_name("username").send_keys("gzsq_peizhi")
         self.browser.find_element_by_name("password").send_keys("gzsq_test")
