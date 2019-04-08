@@ -103,4 +103,4 @@ class Test(unittest.TestCase):
 
     @BeautifulReport.add_test_img('test_03')
     def test03(self):
-        u"""test03"""
+        u"""test033"""
