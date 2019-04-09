@@ -19,7 +19,6 @@ class Test(unittest.TestCase):
     def save_img(self, img_name):
         self.brower.get_screenshot_as_file('{}/{}.png'.format(os.path.abspath("E:\\test\\8_0\\img"), img_name))
 
-    @BeautifulReport.add_test_img('登录进入首页')
     def setUp(self):
         # self.brower = webdriver.Chrome()
         self.starttime = parse(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
@@ -36,7 +35,7 @@ class Test(unittest.TestCase):
         time.sleep(3)
 
     def tearDown(self):
-        self.self.brower.quit()
+        self.brower.quit()
         self.endtime = parse(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
         print("测试结束时间：", self.endtime)
         totaltime = (self.endtime - self.starttime).total_seconds()
@@ -83,7 +82,7 @@ class Test(unittest.TestCase):
                 self.save_img('取top10关键词，随机检索')
 
     @BeautifulReport.add_test_img('点击top榜单话题随机检索')
-    def word_only_search(self):
+    def word_top_search(self):
         u"""点击top榜单话题随机检索"""
         for i in range(0, 10):
             j = random.randint(0, 10)
@@ -98,8 +97,8 @@ class Test(unittest.TestCase):
             handles = self.brower.window_handles
             self.brower.switch_to.window(handles[0])
 
-    @BeautifulReport.add_test_img('单个关键词指定检索')
-    def word_only_search(self):
+    @BeautifulReport.add_test_img('切换tab检索')
+    def tab_select_search(self):
         u"""切换tab检索"""
         for i in range(0, 10):
             j = random.randint(0, 20)
