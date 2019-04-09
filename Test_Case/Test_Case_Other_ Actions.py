@@ -2,13 +2,9 @@
 """
 author:Shanchi Liang
 """
-import re
 import os
 import time
-import random
 import unittest
-import urllib.request
-from bs4 import BeautifulSoup
 from selenium import webdriver
 from dateutil.parser import parse
 from BeautifulReport import BeautifulReport
