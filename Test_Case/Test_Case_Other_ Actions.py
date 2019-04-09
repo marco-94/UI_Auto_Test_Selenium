@@ -42,6 +42,25 @@ class Test(unittest.TestCase):
         print("总时长：", totaltime, "秒")
 
     @BeautifulReport.add_test_img('滚动到底部')
-    def word_only_search(self):
+    def scroll_to_the_bottom(self):
         u"""滚动到底部"""
+        self.browser.execute_script("var action=document.documentElement.scrollTop=10000")
+        time.sleep(1)
+        self.save_img('滚动到底部')
 
+    @BeautifulReport.add_test_img('查看更多')
+    def look_more(self):
+        u"""查看更多"""
+        self.browser.find_element_by_xpath("//*[@id=\"look-more\"]/span").click()
+        time.sleep(1)
+        self.save_img('查看更多')
+
+    @BeautifulReport.add_test_img('滚动到顶部')
+    def scroll_to_the_top(self):
+        u"""滚动到顶部"""
+        # 拖动滚动条
+        self.browser.execute_script("var action=document.documentElement.scrollTop=0")
+        # 点击返回顶部按钮
+        # self.browser.find_element_by_xpath("//*[@id=\"loginWrap\"]/div[8]/a")
+        time.sleep(1)
+        self.save_img('滚动到顶部')
