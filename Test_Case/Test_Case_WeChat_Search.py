@@ -115,3 +115,20 @@ class Test(unittest.TestCase):
             else:
                 print("更多")
                 continue
+
+    @BeautifulReport.add_test_img('图片话题切换检索')
+    def picture_select_search(self):
+        u"""图片话题切换检索"""
+        for i in range(0, 10):
+            j = random.randint(0, 4)
+            self.print(j)
+            self.browser.find_elements_by_xpath("//*[@id=\"loginWrap\"]/div[4]/div[1]/div[1]/div/div/div")[j].click()
+            self.time.sleep(1)
+            self.browser.find_elements_by_xpath("//*[@id=\"loginWrap\"]/div[4]/div[1]/div[1]/div/descendant::a")[j].click()
+            self.handles = self.browser.window_handles
+            self.browser.switch_to.window(handles[1])
+            self.time.sleep(1)
+            self.browser.close()
+            handles = self.browser.window_handles
+            self.browser.switch_to.window(handles[0])
+        self.save_img('图片话题切换检索')
