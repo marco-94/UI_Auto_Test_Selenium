@@ -139,32 +139,24 @@ class Test(unittest.TestCase):
         u"""查看文章详情"""
         for i in range(0, 10):
             total = len(self.browser.find_elements_by_xpath("//*[@id=\"pc_0_d\"]/descendant::li"))
-            print(total)
-            j = random.randint(0, total - 1)
-            # 筛选点击标题
-            k = 1 + 4 * j
-            self.browser.find_elements_by_xpath("//*[@id=\"pc_0_d\"]/descendant::a")[k].click()
+            j = random.randint(0, total-1)
+            # 随机点击标题，查看详情
+            self.browser.find_elements_by_xpath("//*[@id=\"pc_0_d\"]/descendant::a")[1+4*j].click()
             time.sleep(3)
             self.save_img('查看文章详情')
-            print(1)
             handles = self.browser.window_handles
             self.browser.switch_to.window(handles[1])
-            time.sleep(3)
+            time.sleep(1)
             self.browser.close()
             handles = self.browser.window_handles
             self.browser.switch_to.window(handles[0])
             time.sleep(1)
-            print(2)
             try:
-                # 滚动到底部
-                self.browser.execute_script("var action=document.documentElement.scrollTop=10000")
-                time.sleep(1)
                 # 查看更多
                 self.browser.find_element_by_xpath("//*[@id=\"look-more\"]/span").click()
                 time.sleep(1)
             except ElementNotVisibleException:
                 pass
-                # print("没有更多：")
             # 滚动到底部之后，不可逆向往上查找，所以每次都要返回到顶部，再进行下一次查找
             self.browser.execute_script("var action=document.documentElement.scrollTop=0")
             time.sleep(1)
