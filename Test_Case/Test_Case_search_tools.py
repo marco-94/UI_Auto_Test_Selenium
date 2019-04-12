@@ -41,8 +41,39 @@ class Test(unittest.TestCase):
     @BeautifulReport.add_test_img('时间筛选')
     def scroll_to_the_bottom(self):
         u"""时间筛选"""
-        self.browser.execute_script("var action=document.documentElement.scrollTop=10000")
+        self.browser.find_element_by_xpath("//*[@id=\"query\"]").send_keys("微信")
+        self.browser.find_element_by_xpath("//*[@id=\"searchForm\"]/div/input[3]").click()
+        time.sleep(2)
+        self.browser.find_element_by_xpath("//*[@id=\"tool_show\"]/a").click()
         time.sleep(1)
-        self.save_img('滚动到底部')
+        for i in range(0, 10):
+            self.browser.find_element_by_xpath("//*[@id=\"time\"]").click()
+            time.sleep(1)
+            total = len(self.browser.find_elements_by_xpath("//*[@id=\"tool\"]/span[1]/div/descendant::a"))
+            j = random.randint(0, total-1)
+            week = random.randint(1, 6)
+            day = random.randint(0, 41)
+            if 0 <= j < (total-1):
+                self.browser.find_elements_by_xpath("//*[@id=\"tool\"]/span[1]/div/descendant::a")[j].click()
+                time.sleep(1)
+            elif j == (total-1):
+                self.browser.find_element_by_xpath("//*[@id=\"date_start\"]").click()
+                time.sleep(1)
+                # 翻到上上月
+                for n in range(0, 2):
+                    self.browser.find_element_by_xpath("/html/body/div[6]/div[1]/a[1]").click()
+                time.sleep(1)
+                self.browser.find_elements_by_xpath("/html/body/div[6]/div[2]/table/tbody/descendant::tr")[week]\
+                    .find_elements_by_xpath("/html/body/div[6]/div[2]/table/tbody/descendant::td")[day].click()
+                time.sleep(1)
+                self.browser.find_element_by_xpath("//*[@id=\"date_end\"]").click()
+                time.sleep(1)
+                self.browser.find_element_by_xpath("/html/body/div[7]/div[1]/a[1]").click()
+                time.sleep(1)
+                self.browser.find_elements_by_xpath("/html/body/div[7]/div[2]/table/tbody/descendant::tr")[week]\
+                    .find_elements_by_xpath("/html/body/div[7]/div[2]/table/tbody/descendant::td")[day].click()
+                time.sleep(1)
+                self.browser.find_elements_by_xpath("//*[@id=\"tool\"]/span[1]/div/descendant::a")[j].click()
+            self.save_img('时间筛选')
 
 
