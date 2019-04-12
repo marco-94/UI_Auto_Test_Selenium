@@ -5,6 +5,7 @@ author:Shanchi Liang
 import os
 import time
 import unittest
+from random import random
 from selenium import webdriver
 from dateutil.parser import parse
 from BeautifulReport import BeautifulReport
@@ -60,3 +61,18 @@ class Test(unittest.TestCase):
         # self.browser.find_element_by_xpath("//*[@id=\"loginWrap\"]/div[8]/a")
         time.sleep(1)
         self.save_img('滚动到顶部')
+
+    @BeautifulReport.add_test_img('翻页')
+    def scroll_to_the_top(self):
+        u"""翻页"""
+        self.browser.find_element_by_xpath("//*[@id=\"query\"]").send_keys("微信")
+        self.browser.find_element_by_xpath("//*[@id=\"searchForm\"]/div/input[3]").click()
+        time.sleep(2)
+        for i in range(0, 10):
+            total = len(self.browser.find_elements_by_xpath("//*[@id=\"pagebar_container\"]/descendant::a"))
+            j = random.randint(0, total-1)
+            self.browser.execute_script("var action=document.documentElement.scrollTop=10000")
+            time.sleep(1)
+            self.save_img('翻页')
+            self.browser.find_elements_by_xpath("//*[@id=\"pagebar_container\"]/descendant::a")[j].click()
+            time.sleep(1)
