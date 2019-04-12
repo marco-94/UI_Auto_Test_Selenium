@@ -161,3 +161,42 @@ class Test(unittest.TestCase):
             self.browser.execute_script("var action=document.documentElement.scrollTop=0")
             time.sleep(1)
 
+    @BeautifulReport.add_test_img('查看站点文章详情')
+    def word_only_search(self):
+        u"""查看站点文章详情"""
+        for i in range(0, 10):
+            total = len(self.browser.find_elements_by_xpath("//*[@id=\"pc_0_d\"]/descendant::li"))
+            j = random.randint(0, total - 1)
+            # 随机点击发文站点，进入站点主页
+            k = 2 + 4 * j
+            self.browser.find_elements_by_xpath("//*[@id=\"pc_0_d\"]/descendant::a")[k].click()
+            time.sleep(3)
+            self.save_img('图片话题切换检索')
+            handles = self.browser.window_handles
+            self.browser.switch_to.window(handles[1])
+            time.sleep(3)
+            for q in range(0, 3):
+                station_article_total = len(self.browser.find_elements_by_xpath("//*[@id=\"history\"]/descendant::h4"))
+                g = random.randint(0, station_article_total - 1)
+                # 随机点击站点文章，查看详情
+                self.browser.find_elements_by_xpath("//*[@id=\"history\"]/descendant::h4")[g].click()
+                time.sleep(3)
+                self.save_img('图片话题切换检索')
+                self.browser.back()
+                time.sleep(3)
+                self.browser.execute_script("var action=document.documentElement.scrollTop=0")
+                time.sleep(1)
+            self.browser.close()
+            handles = self.browser.window_handles
+            self.browser.switch_to.window(handles[0])
+            time.sleep(1)
+            try:
+                # 查看更多
+                self.browser.find_element_by_xpath("//*[@id=\"look-more\"]/span").click()
+                time.sleep(1)
+            except ElementNotVisibleException:
+                pass
+            # 滚动到底部之后，不可逆向往上查找，所以每次都要返回到顶部，再进行下一次查找
+            self.browser.execute_script("var action=document.documentElement.scrollTop=0")
+            time.sleep(1)
+
