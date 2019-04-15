@@ -100,4 +100,39 @@ class Test(unittest.TestCase):
                 self.browser.find_element_by_xpath("//*[@id=\"check_video\"]").click()
                 self.browser.find_element_by_xpath("//*[@id=\"type_enter\"]").click()
 
-
+    @BeautifulReport.add_test_img('公众号内检索')
+    def scroll_to_the_bottom(self):
+        u"""公众号内检索"""
+        self.browser.find_element_by_xpath("//*[@id=\"query\"]").send_keys("微信")
+        self.browser.find_element_by_xpath("//*[@id=\"searchForm\"]/div/input[3]").click()
+        time.sleep(2)
+        # 小知识：判断标题是否一致（页面是否加载完成），返回是与否
+        title = self.EC.title_is(u'微信的相关微信公众号文章 – 搜狗微信搜索')
+        print(title(self.browser))
+        total = len(self.browser.find_elements_by_xpath("//*[@id=\"main\"]/div[5]/ul/descendant::li"))
+        # 获取当前页面全部的站点信息
+        j = 0
+        public_address_list = []
+        while j < total:
+            public_address_list. \
+                append(self.browser.find_elements_by_xpath("//*[@id=\"main\"]/div[5]/ul/descendant::a")[2 + 5 * j].text)
+            j += 1
+        for i in range(0, 10):
+            k = random.randint(0, len(public_address_list) - 1)
+            self.browser.find_element_by_xpath("//*[@id=\"tool_show\"]/a").click()
+            time.sleep(1)
+            # 此处存在反爬，不可循环
+            self.browser.find_element_by_xpath("//*[@id=\"search\"]").click()
+            time.sleep(1)
+            self.browser.find_element_by_xpath("//*[@id=\"tool\"]/span[5]/div/form/span/input"). \
+                send_keys(public_address_list[k])
+            time.sleep(1)
+            # 模拟键盘回车
+            self.browser.find_element_by_xpath("//*[@id=\"tool\"]/span[5]/div/form/span/input").\
+                send_keys(self.Keys.ENTER)
+            # 点击检索按钮
+            self.browser.find_element_by_xpath("//*[@id=\"search_enter\"]").click()
+            time.sleep(3)
+            # 取消筛选
+            self.browser.find_element_by_xpath("//*[@id=\"tool_clear\"]/a").click()
+            time.sleep(3)
