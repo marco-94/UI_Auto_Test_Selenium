@@ -121,7 +121,7 @@ class Test(unittest.TestCase):
             k = random.randint(0, len(public_address_list) - 1)
             self.browser.find_element_by_xpath("//*[@id=\"tool_show\"]/a").click()
             time.sleep(1)
-            # 此处存在反爬，不可循环
+            # 此处存在fp，不可循环
             self.browser.find_element_by_xpath("//*[@id=\"search\"]").click()
             time.sleep(1)
             self.browser.find_element_by_xpath("//*[@id=\"tool\"]/span[5]/div/form/span/input"). \
