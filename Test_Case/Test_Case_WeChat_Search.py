@@ -12,8 +12,8 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from dateutil.parser import parse
 from BeautifulReport import BeautifulReport
-from selenium.common.exceptions import ElementNotVisibleException
 from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import ElementNotVisibleException, WebDriverException
 
 
 class Test(unittest.TestCase):
@@ -116,6 +116,27 @@ class Test(unittest.TestCase):
             else:
                 print("更多")
                 continue
+
+    @BeautifulReport.add_test_img('滚动图片选择检索')
+    def roll_picture_search(self):
+        u"""滚动图片选择检索"""
+        for i in range(0, 10):
+            j = random.randint(0, 4)
+            try:
+                self.browser.find_elements_by_xpath("//*[@id=\"loginWrap\"]/div[4]/div[1]/div[1]/div/descendant::p")[j].click()
+                time.sleep(3)
+                self.save_img('滚动图片选择检索')
+                handles = self.browser.window_handles
+                self.browser.switch_to.window(handles[1])
+                time.sleep(1)
+                self.browser.close()
+                time.sleep(1)
+                handles = self.browser.window_handles
+                self.browser.switch_to.window(handles[0])
+                time.sleep(1)
+            except WebDriverException:
+                self.browser.find_element_by_xpath("//*[@id=\"loginWrap\"]/div[4]/div[1]/div[1]/div/a[7]").click()
+                time.sleep(1)
 
     @BeautifulReport.add_test_img('图片话题切换检索')
     def picture_select_search(self):
