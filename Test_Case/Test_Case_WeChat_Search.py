@@ -221,3 +221,5 @@ class Test(unittest.TestCase):
             self.browser.execute_script("var action=document.documentElement.scrollTop=0")
             time.sleep(1)
 
+if __name__ == '__main__':
+    unittest.main()

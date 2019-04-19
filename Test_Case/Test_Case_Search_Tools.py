@@ -136,3 +136,6 @@ class Test(unittest.TestCase):
             # 取消筛选
             self.browser.find_element_by_xpath("//*[@id=\"tool_clear\"]/a").click()
             time.sleep(3)
+
+if __name__ == '__main__':
+    unittest.main()

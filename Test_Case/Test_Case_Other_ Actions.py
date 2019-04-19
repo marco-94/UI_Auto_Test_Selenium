@@ -76,3 +76,6 @@ class Test(unittest.TestCase):
             self.save_img('翻页')
             self.browser.find_elements_by_xpath("//*[@id=\"pagebar_container\"]/descendant::a")[j].click()
             time.sleep(1)
+
+if __name__ == '__main__':
+    unittest.main()
