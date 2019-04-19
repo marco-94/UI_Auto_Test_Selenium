@@ -59,7 +59,7 @@ class Test(unittest.TestCase):
         u"""滚动到顶部"""
         # 拖动滚动条
         self.browser.execute_script("var action=document.documentElement.scrollTop=0")
-        # 点击返回顶部按钮
+        # 点击返回按钮返回顶部
         # self.browser.find_element_by_xpath("//*[@id=\"loginWrap\"]/div[8]/a")
         time.sleep(1)
         self.save_img('滚动到顶部')
