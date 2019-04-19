@@ -14,20 +14,22 @@ from selenium.webdriver.chrome.options import Options
 
 class Test(unittest.TestCase):
     def save_img(self, img_name):
-        self.browser.get_screenshot_as_file('{}/{}.png'.format(os.path.abspath("E:\\test\\8_0\\img"), img_name))
+        self.browser \
+            .get_screenshot_as_file('{}/{}.png'
+                                    .format(os.path.abspath("E:/test/auto_test_local/Auto_Test/img"), img_name))
 
     def setUp(self):
-        self.browser = webdriver.Chrome()
+        # self.browser = webdriver.Chrome()
         self.starttime = parse(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
         print("开始测试时间：", self.starttime)
-        # self.chrome_options = Options()
+        self.chrome_options = Options()
         # # 禁止图片加载
         # prefs = {"profile.managed_default_content_settings.images": 2}
         # self.chrome_options.add_experimental_option("prefs", prefs)
         # # 设置chrome浏览器无界面模式
-        # self.chrome_options.add_argument('--headless')
-        # self.browser = webdriver.Chrome(options=self.chrome_options)
-        self.browser.maximize_window()
+        self.chrome_options.add_argument('--headless')
+        self.browser = webdriver.Chrome(options=self.chrome_options)
+        self.browser.set_window_size(1920, 1080)
         self.browser.get("https://weixin.sogou.com/")
         time.sleep(3)
 
