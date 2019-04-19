@@ -43,7 +43,7 @@ class Test(unittest.TestCase):
         print("总时长：", totaltime, "秒")
 
     @BeautifulReport.add_test_img('单个关键词指定检索')
-    def word_only_search(self):
+    def test_word_only_search(self):
         u"""单个关键词指定检索"""
         self.browser.find_element_by_xpath("//*[@id=\"query\"]").send_keys("微信")
         self.browser.find_element_by_xpath("//*[@id=\"searchForm\"]/div/input[3]").click()
@@ -51,7 +51,7 @@ class Test(unittest.TestCase):
         self.save_img('单个关键词指定检索')
         
     @BeautifulReport.add_test_img('取top10关键词，随机检索')
-    def word_random_search(self):
+    def test_word_random_search(self):
         u"""取top10关键词，随机检索"""
         url = self.browser.current_url
         response = urllib.request.urlopen(url)
@@ -83,7 +83,7 @@ class Test(unittest.TestCase):
                 self.save_img('取top10关键词，随机检索')
 
     @BeautifulReport.add_test_img('点击top榜单话题随机检索')
-    def word_top_search(self):
+    def test_word_top_search(self):
         u"""点击top榜单话题随机检索"""
         for i in range(0, 10):
             j = random.randint(0, 10)
@@ -99,7 +99,7 @@ class Test(unittest.TestCase):
             self.browser.switch_to.window(handles[0])
 
     @BeautifulReport.add_test_img('切换tab检索')
-    def tab_select_search(self):
+    def test_tab_select_search(self):
         u"""切换tab检索"""
         for i in range(0, 10):
             j = random.randint(0, 20)
@@ -118,7 +118,7 @@ class Test(unittest.TestCase):
                 continue
 
     @BeautifulReport.add_test_img('滚动图片选择检索')
-    def roll_picture_search(self):
+    def test_roll_picture_search(self):
         u"""滚动图片选择检索"""
         for i in range(0, 10):
             j = random.randint(0, 4)
@@ -139,7 +139,7 @@ class Test(unittest.TestCase):
                 time.sleep(1)
 
     @BeautifulReport.add_test_img('图片话题切换检索')
-    def picture_select_search(self):
+    def test_picture_select_search(self):
         u"""图片话题切换检索"""
         for i in range(0, 10):
             j = random.randint(0, 4)
@@ -156,7 +156,7 @@ class Test(unittest.TestCase):
         self.save_img('图片话题切换检索')
 
     @BeautifulReport.add_test_img('查看文章详情')
-    def article_detail(self):
+    def test_article_detail(self):
         u"""查看文章详情"""
         for i in range(0, 10):
             total = len(self.browser.find_elements_by_xpath("//*[@id=\"pc_0_d\"]/descendant::li"))
@@ -183,7 +183,7 @@ class Test(unittest.TestCase):
             time.sleep(1)
 
     @BeautifulReport.add_test_img('查看站点文章详情')
-    def word_only_search(self):
+    def test_word_only_search(self):
         u"""查看站点文章详情"""
         for i in range(0, 10):
             total = len(self.browser.find_elements_by_xpath("//*[@id=\"pc_0_d\"]/descendant::li"))
@@ -220,6 +220,7 @@ class Test(unittest.TestCase):
             # 滚动到底部之后，不可逆向往上查找，所以每次都要返回到顶部，再进行下一次查找
             self.browser.execute_script("var action=document.documentElement.scrollTop=0")
             time.sleep(1)
+
 
 if __name__ == '__main__':
     unittest.main()

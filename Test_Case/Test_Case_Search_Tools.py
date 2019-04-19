@@ -39,7 +39,7 @@ class Test(unittest.TestCase):
         print("总时长：", totaltime, "秒")
 
     @BeautifulReport.add_test_img('时间筛选')
-    def scroll_to_the_bottom(self):
+    def test_scroll_to_the_bottom(self):
         u"""时间筛选"""
         self.browser.find_element_by_xpath("//*[@id=\"query\"]").send_keys("微信")
         self.browser.find_element_by_xpath("//*[@id=\"searchForm\"]/div/input[3]").click()
@@ -77,7 +77,7 @@ class Test(unittest.TestCase):
             self.save_img('时间筛选')
 
     @BeautifulReport.add_test_img('类型筛选')
-    def scroll_to_the_bottom(self):
+    def test_scroll_to_the_bottom(self):
         u"""类型筛选"""
         self.browser.find_element_by_xpath("//*[@id=\"query\"]").send_keys("微信")
         self.browser.find_element_by_xpath("//*[@id=\"searchForm\"]/div/input[3]").click()
@@ -101,7 +101,7 @@ class Test(unittest.TestCase):
                 self.browser.find_element_by_xpath("//*[@id=\"type_enter\"]").click()
 
     @BeautifulReport.add_test_img('公众号内检索')
-    def scroll_to_the_bottom(self):
+    def test_scroll_to_the_bottom(self):
         u"""公众号内检索"""
         self.browser.find_element_by_xpath("//*[@id=\"query\"]").send_keys("微信")
         self.browser.find_element_by_xpath("//*[@id=\"searchForm\"]/div/input[3]").click()
@@ -136,6 +136,7 @@ class Test(unittest.TestCase):
             # 取消筛选
             self.browser.find_element_by_xpath("//*[@id=\"tool_clear\"]/a").click()
             time.sleep(3)
+
 
 if __name__ == '__main__':
     unittest.main()

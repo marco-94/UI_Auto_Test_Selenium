@@ -39,21 +39,21 @@ class Test(unittest.TestCase):
         print("总时长：", totaltime, "秒")
 
     @BeautifulReport.add_test_img('滚动到底部')
-    def scroll_to_the_bottom(self):
+    def test_scroll_to_the_bottom(self):
         u"""滚动到底部"""
         self.browser.execute_script("var action=document.documentElement.scrollTop=10000")
         time.sleep(1)
         self.save_img('滚动到底部')
 
     @BeautifulReport.add_test_img('查看更多')
-    def look_more(self):
+    def test_look_more(self):
         u"""查看更多"""
         self.browser.find_element_by_xpath("//*[@id=\"look-more\"]/span").click()
         time.sleep(1)
         self.save_img('查看更多')
 
     @BeautifulReport.add_test_img('滚动到顶部')
-    def scroll_to_the_top(self):
+    def test_scroll_to_the_top(self):
         u"""滚动到顶部"""
         # 拖动滚动条
         self.browser.execute_script("var action=document.documentElement.scrollTop=0")
@@ -63,7 +63,7 @@ class Test(unittest.TestCase):
         self.save_img('滚动到顶部')
 
     @BeautifulReport.add_test_img('翻页')
-    def scroll_to_the_top(self):
+    def test_scroll_to_the_top(self):
         u"""翻页"""
         self.browser.find_element_by_xpath("//*[@id=\"query\"]").send_keys("微信")
         self.browser.find_element_by_xpath("//*[@id=\"searchForm\"]/div/input[3]").click()
@@ -76,6 +76,7 @@ class Test(unittest.TestCase):
             self.save_img('翻页')
             self.browser.find_elements_by_xpath("//*[@id=\"pagebar_container\"]/descendant::a")[j].click()
             time.sleep(1)
+
 
 if __name__ == '__main__':
     unittest.main()
