@@ -5,7 +5,7 @@ author:Shanchi Liang
 import os
 import time
 import unittest
-from random import random
+import random
 from selenium import webdriver
 from dateutil.parser import parse
 from BeautifulReport import BeautifulReport
@@ -17,17 +17,17 @@ class Test(unittest.TestCase):
         self.browser.get_screenshot_as_file('{}/{}.png'.format(os.path.abspath("E:\\test\\8_0\\img"), img_name))
 
     def setUp(self):
-        # self.browser = webdriver.Chrome()
+        self.browser = webdriver.Chrome()
         self.starttime = parse(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
         print("开始测试时间：", self.starttime)
-        self.chrome_options = Options()
-        # 禁止图片加载
-        prefs = {"profile.managed_default_content_settings.images": 2}
-        self.chrome_options.add_experimental_option("prefs", prefs)
-        # 设置chrome浏览器无界面模式
-        self.chrome_options.add_argument('--headless')
-        self.browser = webdriver.Chrome(chrome_options=self.chrome_options)
-        self.browser.set_window_size(1920, 1080)
+        # self.chrome_options = Options()
+        # # 禁止图片加载
+        # prefs = {"profile.managed_default_content_settings.images": 2}
+        # self.chrome_options.add_experimental_option("prefs", prefs)
+        # # 设置chrome浏览器无界面模式
+        # self.chrome_options.add_argument('--headless')
+        # self.browser = webdriver.Chrome(options=self.chrome_options)
+        self.browser.maximize_window()
         self.browser.get("https://weixin.sogou.com/")
         time.sleep(3)
 
@@ -63,7 +63,7 @@ class Test(unittest.TestCase):
         self.save_img('滚动到顶部')
 
     @BeautifulReport.add_test_img('翻页')
-    def test_scroll_to_the_top(self):
+    def test_select_page(self):
         u"""翻页"""
         self.browser.find_element_by_xpath("//*[@id=\"query\"]").send_keys("微信")
         self.browser.find_element_by_xpath("//*[@id=\"searchForm\"]/div/input[3]").click()
