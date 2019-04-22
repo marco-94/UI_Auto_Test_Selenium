@@ -19,16 +19,16 @@ class Test(unittest.TestCase):
                                     .format(os.path.abspath("E:/test/team/Auto_Test/img"), img_name))
 
     def setUp(self):
-        # self.browser = webdriver.Chrome()
+        self.browser = webdriver.Chrome()
         self.starttime = parse(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
         print("开始测试时间：", self.starttime)
-        self.chrome_options = Options()
+        # self.chrome_options = Options()
         # # 禁止图片加载
-        prefs = {"profile.managed_default_content_settings.images": 2}
-        self.chrome_options.add_experimental_option("prefs", prefs)
-        # 设置chrome浏览器无界面模式
-        self.chrome_options.add_argument('--headless')
-        self.browser = webdriver.Chrome(options=self.chrome_options)
+        # prefs = {"profile.managed_default_content_settings.images": 2}
+        # self.chrome_options.add_experimental_option("prefs", prefs)
+        # # 设置chrome浏览器无界面模式
+        # self.chrome_options.add_argument('--headless')
+        # self.browser = webdriver.Chrome(options=self.chrome_options)
         self.browser.set_window_size(1920, 1080)
         self.browser.get("https://weixin.sogou.com/")
         time.sleep(3)
@@ -41,7 +41,7 @@ class Test(unittest.TestCase):
         print("总时长：", totaltime, "秒")
 
     @BeautifulReport.add_test_img('时间筛选')
-    def test_scroll_to_the_bottom(self):
+    def test_select_time_search(self):
         u"""时间筛选"""
         self.browser.find_element_by_xpath("//*[@id=\"query\"]").send_keys("微信")
         self.browser.find_element_by_xpath("//*[@id=\"searchForm\"]/div/input[3]").click()
@@ -108,7 +108,6 @@ class Test(unittest.TestCase):
         u"""公众号内检索"""
         self.browser.find_element_by_xpath("//*[@id=\"query\"]").send_keys("微信")
         self.browser.find_element_by_xpath("//*[@id=\"searchForm\"]/div/input[3]").click()
-        time.sleep(5)
         total = len(self.browser.find_elements_by_xpath("//*[@id=\"main\"]/div[5]/ul/descendant::li"))
         # 获取当前页面全部的站点信息
         j = 0
@@ -117,7 +116,7 @@ class Test(unittest.TestCase):
             public_address_list. \
                 append(self.browser.find_elements_by_xpath("//*[@id=\"main\"]/div[5]/ul/descendant::a")[2 + 5 * j].text)
             j += 1
-        time.sleep(3)
+        time.sleep(1)
         for i in range(0, 10):
             k = random.randint(0, (len(public_address_list)-1))
             self.browser.find_element_by_xpath("//*[@id=\"tool_show\"]/a").click()
