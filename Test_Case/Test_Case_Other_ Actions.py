@@ -16,7 +16,7 @@ class Test(unittest.TestCase):
     def save_img(self, img_name):
         self.browser \
             .get_screenshot_as_file('{}/{}.png'
-                                    .format(os.path.abspath("E:/test/auto_test_local/Auto_Test/img"), img_name))
+                                    .format(os.path.abspath("E:/test/team/Auto_Test/img"), img_name))
 
     def setUp(self):
         # self.browser = webdriver.Chrome()

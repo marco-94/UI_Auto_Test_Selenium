@@ -16,7 +16,7 @@ class Test(unittest.TestCase):
     def save_img(self, img_name):
         self.browser \
             .get_screenshot_as_file('{}/{}.png'
-                                    .format(os.path.abspath("E:/test/auto_test_local/Auto_Test/img"), img_name))
+                                    .format(os.path.abspath("E:/test/team/Auto_Test/img"), img_name))
 
     def setUp(self):
         # self.browser = webdriver.Chrome()
@@ -24,9 +24,9 @@ class Test(unittest.TestCase):
         print("开始测试时间：", self.starttime)
         self.chrome_options = Options()
         # # 禁止图片加载
-        # prefs = {"profile.managed_default_content_settings.images": 2}
-        # self.chrome_options.add_experimental_option("prefs", prefs)
-        # # 设置chrome浏览器无界面模式
+        prefs = {"profile.managed_default_content_settings.images": 2}
+        self.chrome_options.add_experimental_option("prefs", prefs)
+        # 设置chrome浏览器无界面模式
         self.chrome_options.add_argument('--headless')
         self.browser = webdriver.Chrome(options=self.chrome_options)
         self.browser.set_window_size(1920, 1080)
@@ -83,7 +83,7 @@ class Test(unittest.TestCase):
         u"""类型筛选"""
         self.browser.find_element_by_xpath("//*[@id=\"query\"]").send_keys("微信")
         self.browser.find_element_by_xpath("//*[@id=\"searchForm\"]/div/input[3]").click()
-        time.sleep(2)
+        time.sleep(5)
         self.browser.find_element_by_xpath("//*[@id=\"tool_show\"]/a").click()
         time.sleep(1)
         for i in range(0, 10):
@@ -108,7 +108,7 @@ class Test(unittest.TestCase):
         u"""公众号内检索"""
         self.browser.find_element_by_xpath("//*[@id=\"query\"]").send_keys("微信")
         self.browser.find_element_by_xpath("//*[@id=\"searchForm\"]/div/input[3]").click()
-        time.sleep(2)
+        time.sleep(5)
         total = len(self.browser.find_elements_by_xpath("//*[@id=\"main\"]/div[5]/ul/descendant::li"))
         # 获取当前页面全部的站点信息
         j = 0
@@ -117,6 +117,7 @@ class Test(unittest.TestCase):
             public_address_list. \
                 append(self.browser.find_elements_by_xpath("//*[@id=\"main\"]/div[5]/ul/descendant::a")[2 + 5 * j].text)
             j += 1
+        time.sleep(3)
         for i in range(0, 10):
             k = random.randint(0, (len(public_address_list)-1))
             self.browser.find_element_by_xpath("//*[@id=\"tool_show\"]/a").click()
@@ -128,8 +129,8 @@ class Test(unittest.TestCase):
                 send_keys(public_address_list[k])
             time.sleep(1)
             # 模拟键盘回车
-            self.browser.find_element_by_xpath("//*[@id=\"tool\"]/span[5]/div/form/span/input").\
-                send_keys(self.Keys.ENTER)
+            # self.browser.find_element_by_xpath("//*[@id=\"tool\"]/span[5]/div/form/span/input").\
+            #     send_keys(self.Keys.ENTER)
             # 点击检索按钮
             self.browser.find_element_by_xpath("//*[@id=\"search_enter\"]").click()
             time.sleep(3)
