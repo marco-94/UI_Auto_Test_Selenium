@@ -210,7 +210,7 @@ class Test(unittest.TestCase):
             time.sleep(1)
 
     @BeautifulReport.add_test_img('查看站点文章详情')
-    def test_word_only_search(self):
+    def test_station_article_detail(self):
         u"""查看站点文章详情"""
         for i in range(0, 10):
             total = len(self.browser.find_elements_by_xpath("//*[@id=\"pc_0_d\"]/descendant::li"))
