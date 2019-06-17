@@ -15,7 +15,8 @@ from dateutil.parser import parse
 from PIL import Image, ImageEnhance
 from BeautifulReport import BeautifulReport
 from selenium.webdriver.chrome.options import Options
-from selenium.common.exceptions import ElementNotVisibleException, WebDriverException, NoSuchElementException
+from selenium.common.exceptions import ElementNotVisibleException, WebDriverException, NoSuchElementException, \
+    ElementClickInterceptedException
 
 
 class Test(unittest.TestCase):
@@ -242,6 +243,8 @@ class Test(unittest.TestCase):
                 self.browser.find_element_by_xpath("//*[@id=\"look-more\"]/span").click()
                 time.sleep(1)
             except ElementNotVisibleException:
+                pass
+            except ElementClickInterceptedException:
                 pass
             # 滚动到底部之后，不可逆向往上查找，所以每次都要返回到顶部，再进行下一次查找
             self.browser.execute_script("var action=document.documentElement.scrollTop=0")
