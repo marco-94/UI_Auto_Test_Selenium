@@ -13,15 +13,15 @@ from selenium.webdriver.chrome.options import Options
 
 
 class Test(unittest.TestCase):
+    img_path = "D:/test/Auto_Test/img"
+    # img_path = img.replace('\\', '/')
+
     def save_img(self, img_name):
         self.browser \
-            .get_screenshot_as_file('{}/{}.png'
-                                    .format(os.path.abspath("D:/test/Auto_Test/img"), img_name))
+            .get_screenshot_as_file('{}/{}.png'.format(os.path.abspath(self.img_path), img_name))
 
     def setUp(self):
         self.browser = webdriver.Chrome()
-        self.starttime = parse(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
-        print("开始测试时间：", self.starttime)
         # self.chrome_options = Options()
         # # 禁止图片加载
         # prefs = {"profile.managed_default_content_settings.images": 2}
@@ -35,10 +35,6 @@ class Test(unittest.TestCase):
 
     def tearDown(self):
         self.browser.quit()
-        self.endtime = parse(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
-        print("测试结束时间：", self.endtime)
-        totaltime = (self.endtime - self.starttime).total_seconds()
-        print("总时长：", totaltime, "秒")
 
     @BeautifulReport.add_test_img('时间筛选')
     def test_select_time_search(self):
@@ -108,13 +104,13 @@ class Test(unittest.TestCase):
         u"""公众号内检索"""
         self.browser.find_element_by_xpath("//*[@id=\"query\"]").send_keys("微信")
         self.browser.find_element_by_xpath("//*[@id=\"searchForm\"]/div/input[3]").click()
-        total = len(self.browser.find_elements_by_xpath("//*[@id=\"main\"]/div[5]/ul/descendant::li"))
+        total = len(self.browser.find_elements_by_xpath("//*[@id=\"main\"]/div[4]/ul/descendant::li"))
         # 获取当前页面全部的站点信息
         j = 0
         public_address_list = []
         while j < total:
             public_address_list. \
-                append(self.browser.find_elements_by_xpath("//*[@id=\"main\"]/div[5]/ul/descendant::a")[2 + 5 * j].text)
+                append(self.browser.find_elements_by_xpath("//*[@id=\"main\"]/div[4]/ul/descendant::a")[2 + 5 * j].text)
             j += 1
         time.sleep(1)
         for i in range(0, 10):

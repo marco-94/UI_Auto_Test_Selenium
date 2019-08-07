@@ -20,8 +20,6 @@ class Test(unittest.TestCase):
 
     def setUp(self):
         self.browser = webdriver.Chrome()
-        self.starttime = parse(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
-        print("开始测试时间：", self.starttime)
         # self.chrome_options = Options()
         # # 禁止图片加载
         # prefs = {"profile.managed_default_content_settings.images": 2}
@@ -35,10 +33,6 @@ class Test(unittest.TestCase):
 
     def tearDown(self):
         self.browser.quit()
-        self.endtime = parse(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
-        print("测试结束时间：", self.endtime)
-        totaltime = (self.endtime - self.starttime).total_seconds()
-        print("总时长：", totaltime, "秒")
 
     @BeautifulReport.add_test_img('滚动到底部')
     def test_scroll_to_the_bottom(self):

@@ -15,20 +15,19 @@ from dateutil.parser import parse
 from PIL import Image, ImageEnhance
 from BeautifulReport import BeautifulReport
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import ElementNotVisibleException, WebDriverException, NoSuchElementException, \
     ElementClickInterceptedException
 
 
 class Test(unittest.TestCase):
-    def save_img(self, img_name, i):
+    def save_img(self, img_name):
         self.browser \
             .get_screenshot_as_file('{}/{}.png'
                                     .format(os.path.abspath("D:/test/Auto_Test/img"), img_name))
 
     def setUp(self):
         self.browser = webdriver.Chrome()
-        self.starttime = parse(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
-        print("开始测试时间：", self.starttime)
         # self.chrome_options = Options()
         # # 禁止图片加载
         # prefs = {"profile.managed_default_content_settings.images": 2}
@@ -42,10 +41,6 @@ class Test(unittest.TestCase):
 
     def tearDown(self):
         self.browser.quit()
-        self.endtime = parse(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
-        print("测试结束时间：", self.endtime)
-        totaltime = (self.endtime - self.starttime).total_seconds()
-        print("总时长：", totaltime, "秒")
 
     @BeautifulReport.add_test_img('单个关键词指定检索')
     def test_word_only_search(self):
@@ -84,7 +79,7 @@ class Test(unittest.TestCase):
                 else:
                     self.browser.find_element_by_xpath("//*[@id=\"scroll-header\"]/form/div/input[1]").click()
                     time.sleep(3)
-                self.save_img('取top10关键词，随机检索', i)
+                self.save_img('取top10关键词，随机检索')
             except NoSuchElementException:
                 screenImg = "E:/test/auto_test_local/Auto_Test/screenImg/screenImg.png"
                 imgsrc = self.browser.find_element_by_xpath("//*[@id=\"seccodeImage\"]").get_attribute('src')
@@ -117,7 +112,7 @@ class Test(unittest.TestCase):
             j = random.randint(0, 10)
             # 属下子节点的全部a标签
             self.browser.find_elements_by_xpath("//*[@id=\"topwords\"]/descendant::a")[j].click()
-            self.save_img('点击top榜单话题随机检索', i)
+            self.save_img('点击top榜单话题随机检索')
             # 切换页面句柄
             handles = self.browser.window_handles
             self.browser.switch_to.window(handles[1])
@@ -133,13 +128,13 @@ class Test(unittest.TestCase):
             j = random.randint(0, 20)
             if j < 11 and j != 10:
                 self.browser.find_elements_by_xpath("//*[@id=\"type_tab\"]/descendant::a")[j].click()
-                self.save_img('切换tab检索', i)
+                self.save_img('切换tab检索')
             elif 11 < j < 20:
                 # 浮现下拉选择框
                 show_more = self.browser.find_element_by_xpath("//*[@id=\"more_anchor\"]")
-                self.ActionChains(self.browser).move_to_element(show_more).perform()
+                ActionChains(self.browser).move_to_element(show_more).perform()
                 self.browser.find_elements_by_xpath("//*[@id=\"type_tab\"]/descendant::a")[j].click()
-                self.save_img('切换tab检索', i)
+                self.save_img('切换tab检索')
             else:
                 # print("更多")
                 continue
@@ -153,7 +148,7 @@ class Test(unittest.TestCase):
                 self.browser.find_elements_by_xpath("//*[@id=\"loginWrap\"]/div[4]/div[1]/div[1]/div/descendant::p")[j] \
                     .click()
                 time.sleep(3)
-                self.save_img('滚动图片选择检索', i)
+                self.save_img('滚动图片选择检索')
                 handles = self.browser.window_handles
                 self.browser.switch_to.window(handles[1])
                 time.sleep(1)
@@ -181,9 +176,9 @@ class Test(unittest.TestCase):
             self.browser.close()
             handles = self.browser.window_handles
             self.browser.switch_to.window(handles[0])
-        self.save_img('图片话题切换检索')
+            self.save_img('图片话题切换检索')
 
-    @BeautifulReport.add_test_img('查看文章详情')
+    @BeautifulReport.add_test_img('点击文章标题', '查看文章详情')
     def test_article_detail(self):
         u"""查看文章详情"""
         for i in range(0, 10):
@@ -192,9 +187,10 @@ class Test(unittest.TestCase):
             # 随机点击标题，查看详情
             self.browser.find_elements_by_xpath("//*[@id=\"pc_0_d\"]/descendant::a")[1 + 4 * j].click()
             time.sleep(3)
-            self.save_img('查看文章详情', i)
+            self.save_img('点击文章标题')
             handles = self.browser.window_handles
             self.browser.switch_to.window(handles[1])
+            self.save_img('查看文章详情')
             time.sleep(1)
             self.browser.close()
             handles = self.browser.window_handles
@@ -205,46 +201,6 @@ class Test(unittest.TestCase):
                 self.browser.find_element_by_xpath("//*[@id=\"look-more\"]/span").click()
                 time.sleep(1)
             except ElementNotVisibleException:
-                pass
-            # 滚动到底部之后，不可逆向往上查找，所以每次都要返回到顶部，再进行下一次查找
-            self.browser.execute_script("var action=document.documentElement.scrollTop=0")
-            time.sleep(1)
-
-    @BeautifulReport.add_test_img('查看站点文章详情')
-    def test_station_article_detail(self):
-        u"""查看站点文章详情"""
-        for i in range(0, 10):
-            total = len(self.browser.find_elements_by_xpath("//*[@id=\"pc_0_d\"]/descendant::li"))
-            j = random.randint(0, total - 1)
-            # 随机点击发文站点，进入站点主页
-            k = 2 + 4 * j
-            self.browser.find_elements_by_xpath("//*[@id=\"pc_0_d\"]/descendant::a")[k].click()
-            time.sleep(3)
-            handles = self.browser.window_handles
-            self.browser.switch_to.window(handles[1])
-            time.sleep(3)
-            for q in range(0, 3):
-                station_article_total = len(self.browser.find_elements_by_xpath("//*[@id=\"history\"]/descendant::h4"))
-                g = random.randint(0, station_article_total - 1)
-                # 随机点击站点文章，查看详情
-                self.browser.find_elements_by_xpath("//*[@id=\"history\"]/descendant::h4")[g].click()
-                time.sleep(3)
-                self.save_img('查看站点文章详情', i)
-                self.browser.back()
-                time.sleep(3)
-                self.browser.execute_script("var action=document.documentElement.scrollTop=0")
-                time.sleep(1)
-            self.browser.close()
-            handles = self.browser.window_handles
-            self.browser.switch_to.window(handles[0])
-            time.sleep(1)
-            try:
-                # 查看更多
-                self.browser.find_element_by_xpath("//*[@id=\"look-more\"]/span").click()
-                time.sleep(1)
-            except ElementNotVisibleException:
-                pass
-            except ElementClickInterceptedException:
                 pass
             # 滚动到底部之后，不可逆向往上查找，所以每次都要返回到顶部，再进行下一次查找
             self.browser.execute_script("var action=document.documentElement.scrollTop=0")
