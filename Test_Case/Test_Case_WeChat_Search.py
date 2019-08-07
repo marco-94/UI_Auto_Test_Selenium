@@ -4,6 +4,7 @@ author:Shanchi Liang
 """
 import re
 import os
+import sys
 import time
 import random
 import unittest
@@ -18,6 +19,8 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import ElementNotVisibleException, WebDriverException, NoSuchElementException, \
     ElementClickInterceptedException
+sys.path.append(r'D:\test\Auto_Test\common')
+from Selenium_Other import BasePage
 
 
 class Test(unittest.TestCase):
@@ -50,7 +53,7 @@ class Test(unittest.TestCase):
         time.sleep(2)
         self.save_img('单个关键词指定检索')
 
-    @BeautifulReport.add_test_img('取top10关键词，随机检索')
+    @BeautifulReport.add_test_img('取top10关键词，随机检索', '访问过多')
     def test_word_random_search(self):
         u"""取top10关键词，随机检索"""
         url = self.browser.current_url
@@ -81,29 +84,7 @@ class Test(unittest.TestCase):
                     time.sleep(3)
                 self.save_img('取top10关键词，随机检索')
             except NoSuchElementException:
-                screenImg = "E:/test/auto_test_local/Auto_Test/screenImg/screenImg.png"
-                imgsrc = self.browser.find_element_by_xpath("//*[@id=\"seccodeImage\"]").get_attribute('src')
-                # 浏览器页面截屏
-                self.browser.get_screenshot_as_file(screenImg)
-                # 定位验证码位置及大小
-                location = self.browser.find_element_by_xpath("//*[@id=\"seccodeImage\"]").location
-                size = self.browser.find_element_by_xpath("//*[@id=\"seccodeImage\"]").size
-                left = location['x']
-                top = location['y']
-                right = location['x'] + size['width']
-                bottom = location['y'] + size['height']
-                # 从文件读取截图，截取验证码位置再次保存
-                img = Image.open(screenImg).crop((left, top, right, bottom))
-                img = img.convert('CMYK')  # 转换模式：L | RGB
-                img = ImageEnhance.Contrast(img)  # 增强对比度
-                img = img.enhance(2.0)  # 增加饱和度
-                img.save(screenImg)
-                # 再次读取识别验证码
-                img = Image.open(screenImg)
-                code = pytesseract.image_to_string(img)
-                self.browser.find_element_by_xpath("//*[@id=\"seccodeInput\"]").send_keys(code.strip())
-                print(code.strip())
-                self.browser.find_element_by_xpath("//*[@id=\"submit\"]").click()
+                self.save_img('访问过多')
 
     @BeautifulReport.add_test_img('点击top榜单话题随机检索')
     def test_word_top_search(self):
@@ -121,7 +102,7 @@ class Test(unittest.TestCase):
             handles = self.browser.window_handles
             self.browser.switch_to.window(handles[0])
 
-    @BeautifulReport.add_test_img('切换tab检索')
+    @BeautifulReport.add_test_img('切换tab检索', '切换更多tab检索')
     def test_tab_select_search(self):
         u"""切换tab检索"""
         for i in range(0, 10):
@@ -130,14 +111,12 @@ class Test(unittest.TestCase):
                 self.browser.find_elements_by_xpath("//*[@id=\"type_tab\"]/descendant::a")[j].click()
                 self.save_img('切换tab检索')
             elif 11 < j < 20:
-                # 浮现下拉选择框
-                show_more = self.browser.find_element_by_xpath("//*[@id=\"more_anchor\"]")
-                ActionChains(self.browser).move_to_element(show_more).perform()
+                # 更多
+                xpath = "//*[@id=\"more_anchor\"]"
+                show_more =BasePage(self.browser)
+                show_more.move_to_element(xpath)
                 self.browser.find_elements_by_xpath("//*[@id=\"type_tab\"]/descendant::a")[j].click()
-                self.save_img('切换tab检索')
-            else:
-                # print("更多")
-                continue
+                self.save_img('切换更多tab检索')
 
     @BeautifulReport.add_test_img('滚动图片选择检索')
     def test_roll_picture_search(self):
@@ -149,14 +128,9 @@ class Test(unittest.TestCase):
                     .click()
                 time.sleep(3)
                 self.save_img('滚动图片选择检索')
-                handles = self.browser.window_handles
-                self.browser.switch_to.window(handles[1])
-                time.sleep(1)
-                self.browser.close()
-                time.sleep(1)
-                handles = self.browser.window_handles
-                self.browser.switch_to.window(handles[0])
-                time.sleep(1)
+                # 关闭页面
+                page_close = BasePage(self.browser)
+                page_close.close_page()
             except WebDriverException:
                 self.browser.find_element_by_xpath("//*[@id=\"loginWrap\"]/div[4]/div[1]/div[1]/div/a[7]").click()
                 time.sleep(1)
@@ -178,7 +152,7 @@ class Test(unittest.TestCase):
             self.browser.switch_to.window(handles[0])
             self.save_img('图片话题切换检索')
 
-    @BeautifulReport.add_test_img('点击文章标题', '查看文章详情')
+    @BeautifulReport.add_test_img('查看文章详情')
     def test_article_detail(self):
         u"""查看文章详情"""
         for i in range(0, 10):
@@ -187,15 +161,10 @@ class Test(unittest.TestCase):
             # 随机点击标题，查看详情
             self.browser.find_elements_by_xpath("//*[@id=\"pc_0_d\"]/descendant::a")[1 + 4 * j].click()
             time.sleep(3)
-            self.save_img('点击文章标题')
-            handles = self.browser.window_handles
-            self.browser.switch_to.window(handles[1])
             self.save_img('查看文章详情')
-            time.sleep(1)
-            self.browser.close()
-            handles = self.browser.window_handles
-            self.browser.switch_to.window(handles[0])
-            time.sleep(1)
+            # 关闭页面
+            page_close = BasePage(self.browser)
+            page_close.close_page()
             try:
                 # 查看更多
                 self.browser.find_element_by_xpath("//*[@id=\"look-more\"]/span").click()
