@@ -94,13 +94,9 @@ class Test(unittest.TestCase):
             # 属下子节点的全部a标签
             self.browser.find_elements_by_xpath("//*[@id=\"topwords\"]/descendant::a")[j].click()
             self.save_img('点击top榜单话题随机检索')
-            # 切换页面句柄
-            handles = self.browser.window_handles
-            self.browser.switch_to.window(handles[1])
-            time.sleep(3)
-            self.browser.close()
-            handles = self.browser.window_handles
-            self.browser.switch_to.window(handles[0])
+            # 关闭页面
+            page_close = BasePage(self.browser)
+            page_close.close_page()
 
     @BeautifulReport.add_test_img('切换tab检索', '切换更多tab检索')
     def test_tab_select_search(self):

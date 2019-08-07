@@ -7,14 +7,14 @@ import time
 import unittest
 import random
 from selenium import webdriver
-from dateutil.parser import parse
+# from dateutil.parser import parse
 from BeautifulReport import BeautifulReport
-from selenium.webdriver.chrome.options import Options
+# from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import ElementNotVisibleException
 
 
 class Test(unittest.TestCase):
     img_path = "D:/test/Auto_Test/img"
-    # img_path = img.replace('\\', '/')
 
     def save_img(self, img_name):
         self.browser \
@@ -104,8 +104,9 @@ class Test(unittest.TestCase):
         u"""公众号内检索"""
         self.browser.find_element_by_xpath("//*[@id=\"query\"]").send_keys("微信")
         self.browser.find_element_by_xpath("//*[@id=\"searchForm\"]/div/input[3]").click()
+        # 获取页面数据总条数
         total = len(self.browser.find_elements_by_xpath("//*[@id=\"main\"]/div[4]/ul/descendant::li"))
-        # 获取当前页面全部的站点信息
+        # 获取当前页面全部的站点信息,放入public_address_list
         j = 0
         public_address_list = []
         while j < total:
@@ -113,26 +114,30 @@ class Test(unittest.TestCase):
                 append(self.browser.find_elements_by_xpath("//*[@id=\"main\"]/div[4]/ul/descendant::a")[2 + 5 * j].text)
             j += 1
         time.sleep(1)
+        # 展开搜索工具
+        self.browser.find_element_by_xpath("//*[@id=\"tool_show\"]/a").click()
+        time.sleep(1)
+        # 展开公众号输入框
+        self.browser.find_element_by_xpath("//*[@id=\"search\"]").click()
+        time.sleep(1)
         for i in range(0, 10):
-            k = random.randint(0, (len(public_address_list)-1))
-            self.browser.find_element_by_xpath("//*[@id=\"tool_show\"]/a").click()
-            time.sleep(1)
-            # 此处存在fp，不可循环
-            self.browser.find_element_by_xpath("//*[@id=\"search\"]").click()
-            time.sleep(1)
-            self.browser.find_element_by_xpath("//*[@id=\"tool\"]/span[5]/div/form/span/input"). \
-                send_keys(public_address_list[k])
-            time.sleep(1)
-            # 模拟键盘回车
-            # self.browser.find_element_by_xpath("//*[@id=\"tool\"]/span[5]/div/form/span/input").\
-            #     send_keys(self.Keys.ENTER)
-            # 点击检索按钮
-            self.browser.find_element_by_xpath("//*[@id=\"search_enter\"]").click()
-            time.sleep(3)
-            self.save_img('公众号内检索')
-            # 取消筛选
-            self.browser.find_element_by_xpath("//*[@id=\"tool_clear\"]/a").click()
-            time.sleep(3)
+            try:
+                k = random.randint(0, (len(public_address_list)-1))
+                # 输入public_address_list内的公众号信息
+                self.browser.find_element_by_xpath("//*[@id=\"tool\"]/span[5]/div/form/span/input"). \
+                    send_keys(public_address_list[k])
+                time.sleep(1)
+                # 点击检索按钮
+                self.browser.find_element_by_xpath("//*[@id=\"search_enter\"]").click()
+                time.sleep(3)
+                self.save_img('公众号内检索')
+                # 清除输入信息
+                self.browser.find_element_by_xpath("//*[@id=\"search\"]").click()
+                search_tool = self.browser.find_element_by_xpath("//*[@id=\"tool\"]/span[5]/div/form/span/input")
+                search_tool.clear()
+            except ElementNotVisibleException:
+                print(self.browser.find_element_by_xpath("//*[@id=\"tool\"]/span[5]/div/form/p").text)
+                continue
 
 
 if __name__ == '__main__':
