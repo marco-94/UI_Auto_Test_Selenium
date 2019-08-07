@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+"""
+author:Shanchi Liang
+"""
 import time
 from selenium.webdriver.common.action_chains import ActionChains
 
