@@ -42,19 +42,25 @@ class Test(unittest.TestCase):
         self.browser.find_element_by_xpath("//*[@id=\"query\"]").send_keys("微信")
         self.browser.find_element_by_xpath("//*[@id=\"searchForm\"]/div/input[3]").click()
         time.sleep(2)
+        # 展开搜索工具
         self.browser.find_element_by_xpath("//*[@id=\"tool_show\"]/a").click()
         time.sleep(1)
         for i in range(0, 10):
+            # 展开时间搜索框
             self.browser.find_element_by_xpath("//*[@id=\"time\"]").click()
             time.sleep(1)
+            # 非自定义时间
             total = len(self.browser.find_elements_by_xpath("//*[@id=\"tool\"]/span[1]/div/descendant::a"))
             j = random.randint(0, (total-1))
+            # 每一行（周）时间
             week = random.randint(1, 6)
             day = random.randint(0, 41)
             if 0 <= j < (total-1):
+                # 选择非自定义时间段
                 self.browser.find_elements_by_xpath("//*[@id=\"tool\"]/span[1]/div/descendant::a")[j].click()
                 time.sleep(1)
             elif j == (total-1):
+                # 选择自定义开始时间
                 self.browser.find_element_by_xpath("//*[@id=\"date_start\"]").click()
                 time.sleep(1)
                 # 翻到上上月
@@ -64,6 +70,7 @@ class Test(unittest.TestCase):
                 self.browser.find_elements_by_xpath("/html/body/div[6]/div[2]/table/tbody/descendant::tr")[week]\
                     .find_elements_by_xpath("/html/body/div[6]/div[2]/table/tbody/descendant::td")[day].click()
                 time.sleep(1)
+                # 选择自定义结束时间
                 self.browser.find_element_by_xpath("//*[@id=\"date_end\"]").click()
                 time.sleep(1)
                 self.browser.find_element_by_xpath("/html/body/div[7]/div[1]/a[1]").click()
@@ -71,6 +78,7 @@ class Test(unittest.TestCase):
                 self.browser.find_elements_by_xpath("/html/body/div[7]/div[2]/table/tbody/descendant::tr")[week]\
                     .find_elements_by_xpath("/html/body/div[7]/div[2]/table/tbody/descendant::td")[day].click()
                 time.sleep(1)
+                # 点击确认按钮
                 self.browser.find_elements_by_xpath("//*[@id=\"tool\"]/span[1]/div/descendant::a")[j].click()
             self.save_img('时间筛选')
 
