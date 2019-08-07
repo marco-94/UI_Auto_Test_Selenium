@@ -85,14 +85,18 @@ class Test(unittest.TestCase):
         for i in range(0, 10):
             j = random.randint(0, 3)
             self.browser.find_element_by_xpath("//*[@id=\"type\"]").click()
+            # 不勾选任意类型
             if j == 0:
                 self.browser.find_element_by_xpath("//*[@id=\"type_enter\"]").click()
+            # 仅筛选图集类型
             elif j == 1:
                 self.browser.find_element_by_xpath("//*[@id=\"check_pic\"]").click()
                 self.browser.find_element_by_xpath("//*[@id=\"type_enter\"]").click()
+            # 仅筛选含视频类型
             elif j == 2:
                 self.browser.find_element_by_xpath("//*[@id=\"check_video\"]").click()
                 self.browser.find_element_by_xpath("//*[@id=\"type_enter\"]").click()
+            # 选中图集和含视频类型
             else:
                 self.browser.find_element_by_xpath("//*[@id=\"check_pic\"]").click()
                 self.browser.find_element_by_xpath("//*[@id=\"check_video\"]").click()

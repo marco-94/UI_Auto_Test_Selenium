@@ -17,6 +17,7 @@ class BasePage(object):
         ActionChains(self.browser).move_to_element(element).perform()
 
     def close_page(self):
+        """关闭新打开的页面"""
         handles = self.browser.window_handles
         self.browser.switch_to.window(handles[1])
         time.sleep(1)
