@@ -3,14 +3,20 @@
 author:Shanchi Liang
 """
 import os
+import sys
 import time
 import unittest
 import random
+import datetime
 from selenium import webdriver
 # from dateutil.parser import parse
 from BeautifulReport import BeautifulReport
+from dateutil.relativedelta import relativedelta
 # from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import ElementNotVisibleException
+
+sys.path.append(r'D:\test\Auto_Test\common')
+from Selenium_Other import BasePage
 
 
 class Test(unittest.TestCase):
@@ -46,40 +52,42 @@ class Test(unittest.TestCase):
         self.browser.find_element_by_xpath("//*[@id=\"tool_show\"]/a").click()
         time.sleep(1)
         for i in range(0, 10):
-            # 展开时间搜索框
-            self.browser.find_element_by_xpath("//*[@id=\"time\"]").click()
-            time.sleep(1)
-            # 非自定义时间
-            total = len(self.browser.find_elements_by_xpath("//*[@id=\"tool\"]/span[1]/div/descendant::a"))
-            j = random.randint(0, (total-1))
-            # 每一行（周）时间
-            week = random.randint(1, 6)
-            day = random.randint(0, 41)
-            if 0 <= j < (total-1):
-                # 选择非自定义时间段
-                self.browser.find_elements_by_xpath("//*[@id=\"tool\"]/span[1]/div/descendant::a")[j].click()
+            try:
+                # 展开时间搜索框
+                self.browser.find_element_by_xpath("//*[@id=\"time\"]").click()
                 time.sleep(1)
-            elif j == (total-1):
-                # 选择自定义开始时间
-                self.browser.find_element_by_xpath("//*[@id=\"date_start\"]").click()
-                time.sleep(1)
-                # 翻到上上月
-                for n in range(0, 2):
-                    self.browser.find_element_by_xpath("/html/body/div[6]/div[1]/a[1]").click()
-                time.sleep(1)
-                self.browser.find_elements_by_xpath("/html/body/div[6]/div[2]/table/tbody/descendant::tr")[week]\
-                    .find_elements_by_xpath("/html/body/div[6]/div[2]/table/tbody/descendant::td")[day].click()
-                time.sleep(1)
-                # 选择自定义结束时间
-                self.browser.find_element_by_xpath("//*[@id=\"date_end\"]").click()
-                time.sleep(1)
-                self.browser.find_element_by_xpath("/html/body/div[7]/div[1]/a[1]").click()
-                time.sleep(1)
-                self.browser.find_elements_by_xpath("/html/body/div[7]/div[2]/table/tbody/descendant::tr")[week]\
-                    .find_elements_by_xpath("/html/body/div[7]/div[2]/table/tbody/descendant::td")[day].click()
-                time.sleep(1)
-                # 点击确认按钮
-                self.browser.find_elements_by_xpath("//*[@id=\"tool\"]/span[1]/div/descendant::a")[j].click()
+                # 非自定义时间
+                total = len(self.browser.find_elements_by_xpath("//*[@id=\"tool\"]/span[1]/div/descendant::a"))
+                j = random.randint(0, (total-1))
+                if 0 <= j < (total-1):
+                    # 选择非自定义时间段
+                    self.browser.find_elements_by_xpath("//*[@id=\"tool\"]/span[1]/div/descendant::a")[j].click()
+                    time.sleep(1)
+                elif j == (total-1):
+                    # 定义时间段： 最近一个月
+                    start_time =BasePage(self.browser)
+                    start_time.get_Every_Day(datetime.date.today() - relativedelta(months=1), datetime.date.today())
+                    date_list = start_time.get_Every_Day(datetime.date.today() - relativedelta(months=1), datetime.date.today())
+                    try:
+                        # 选择自定义开始时间
+                        starttime = self.browser.find_element_by_xpath("//*[@id=\"date_start\"]")
+                        starttime.clear()
+                        starttime.send_keys(date_list[0])
+                        # 输入自定义时间
+                        endtime = self.browser.find_element_by_xpath("//*[@id=\"date_end\"]")
+                        endtime.clear()
+                        endtime.send_keys(date_list[1])
+                        starttime.click()
+                        endtime.click()
+                        # 点击确认按钮
+                        self.browser.find_elements_by_xpath("//*[@id=\"tool\"]/span[1]/div/descendant::a")[j].click()
+                    except ElementNotVisibleException:
+                        # 如果开始时间大于结束时间，本次循环结束，进入下次循环
+                        self.browser.refresh()
+                        continue
+            except ElementNotVisibleException:
+                # 如果第一次输入的开始时间大于结束时间，需要先点击展开检索工具
+                self.browser.find_element_by_xpath("//*[@id=\"tool_show\"]/a").click()
             self.save_img('时间筛选')
 
     @BeautifulReport.add_test_img('类型筛选')
