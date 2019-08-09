@@ -56,7 +56,6 @@ class Test(unittest.TestCase):
                 # 展开时间搜索框
                 self.browser.find_element_by_xpath("//*[@id=\"time\"]").click()
                 time.sleep(1)
-                # 非自定义时间
                 total = len(self.browser.find_elements_by_xpath("//*[@id=\"tool\"]/span[1]/div/descendant::a"))
                 j = random.randint(0, (total-1))
                 if 0 <= j < (total-1):
@@ -69,11 +68,11 @@ class Test(unittest.TestCase):
                     start_time.get_Every_Day(datetime.date.today() - relativedelta(months=1), datetime.date.today())
                     date_list = start_time.get_Every_Day(datetime.date.today() - relativedelta(months=1), datetime.date.today())
                     try:
-                        # 选择自定义开始时间
+                        # 输入自定义开始时间
                         starttime = self.browser.find_element_by_xpath("//*[@id=\"date_start\"]")
                         starttime.clear()
                         starttime.send_keys(date_list[0])
-                        # 输入自定义时间
+                        # 输入自定义结束时间
                         endtime = self.browser.find_element_by_xpath("//*[@id=\"date_end\"]")
                         endtime.clear()
                         endtime.send_keys(date_list[1])
