@@ -95,8 +95,7 @@ class Test(unittest.TestCase):
             self.browser.find_elements_by_xpath("//*[@id=\"topwords\"]/descendant::a")[j].click()
             self.save_img('点击top榜单话题随机检索')
             # 关闭页面
-            page_close = BasePage(self.browser)
-            page_close.close_page()
+            BasePage(self.browser).close_page()
 
     @BeautifulReport.add_test_img('切换tab检索', '切换更多tab检索')
     def test_tab_select_search(self):
@@ -108,9 +107,7 @@ class Test(unittest.TestCase):
                 self.save_img('切换tab检索')
             elif 11 < j < 20:
                 # 更多
-                xpath = "//*[@id=\"more_anchor\"]"
-                show_more =BasePage(self.browser)
-                show_more.move_to_element(xpath)
+                BasePage(self.browser).move_to_element("//*[@id=\"more_anchor\"]")
                 self.browser.find_elements_by_xpath("//*[@id=\"type_tab\"]/descendant::a")[j].click()
                 self.save_img('切换更多tab检索')
 
@@ -125,8 +122,7 @@ class Test(unittest.TestCase):
                 time.sleep(3)
                 self.save_img('滚动图片选择检索')
                 # 关闭页面
-                page_close = BasePage(self.browser)
-                page_close.close_page()
+                BasePage(self.browser).close_page()
             except WebDriverException:
                 self.browser.find_element_by_xpath("//*[@id=\"loginWrap\"]/div[4]/div[1]/div[1]/div/a[7]").click()
                 time.sleep(1)
@@ -159,8 +155,7 @@ class Test(unittest.TestCase):
             time.sleep(3)
             self.save_img('查看文章详情')
             # 关闭页面
-            page_close = BasePage(self.browser)
-            page_close.close_page()
+            BasePage(self.browser).close_page()
             try:
                 # 查看更多
                 self.browser.find_element_by_xpath("//*[@id=\"look-more\"]/span").click()

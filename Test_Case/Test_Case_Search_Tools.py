@@ -59,35 +59,123 @@ class Test(unittest.TestCase):
                 # 展开时间搜索框
                 self.browser.find_element_by_xpath("//*[@id=\"time\"]").click()
                 time.sleep(1)
-                total = len(self.browser.find_elements_by_xpath("//*[@id=\"tool\"]/span[1]/div/descendant::a"))
-                j = random.randint(0, (total-1))
 
+                # 设定是选择非定义时间段还是选择自定义时间端，j = total-1为自定义，其它为非自定义
+                total = len(self.browser.find_elements_by_xpath("//*[@id=\"tool\"]/span[1]/div/descendant::a"))
+                # j = random.randint(0, (total-1))
+
+                j = total-1
                 if 0 <= j < (total-1):
                     # 选择非自定义时间段
                     self.browser.find_elements_by_xpath("//*[@id=\"tool\"]/span[1]/div/descendant::a")[j].click()
                     time.sleep(1)
 
                 elif j == (total-1):
-                    # 定义时间段： 最近一个月
-                    start_time =BasePage(self.browser)
-                    start_time.get_Every_Day(datetime.date.today() - relativedelta(months=1), datetime.date.today())
-                    date_list = start_time.get_Every_Day(datetime.date.today() - relativedelta(months=1), datetime.date.today())
-
+                    # 设定是输入还是选择，0为输入，1为选择
+                    # k = random.randint(0, 1)
+                    k = 1
                     try:
-                        # 输入自定义开始时间
-                        starttime = self.browser.find_element_by_xpath("//*[@id=\"date_start\"]")
-                        starttime.clear()
-                        starttime.send_keys(date_list[0])
+                        if k ==0:
+                            # 定义时间段： 最近一个月
+                            date_list = BasePage(self.browser)\
+                                .get_every_day(datetime.date.today() - relativedelta(months=1), datetime.date.today())
 
-                        # 输入自定义结束时间
-                        endtime = self.browser.find_element_by_xpath("//*[@id=\"date_end\"]")
-                        endtime.clear()
-                        endtime.send_keys(date_list[1])
+                            # 输入自定义开始时间
+                            starttime = self.browser.find_element_by_xpath("//*[@id=\"date_start\"]")
+                            starttime.clear()
+                            starttime.send_keys(date_list[0])
 
-                        # 点击确认按钮
-                        starttime.click()
-                        endtime.click()
-                        self.browser.find_elements_by_xpath("//*[@id=\"tool\"]/span[1]/div/descendant::a")[j].click()
+                            # 输入自定义结束时间
+                            endtime = self.browser.find_element_by_xpath("//*[@id=\"date_end\"]")
+                            endtime.clear()
+                            endtime.send_keys(date_list[1])
+
+                            # 点击确认按钮
+                            starttime.click()
+                            endtime.click()
+                            self.browser.find_elements_by_xpath("//*[@id=\"tool\"]/span[1]/div/descendant::a")[j]\
+                                .click()
+
+                        # 选择自定义时间
+                        elif k == 1:
+                            """自定义开始时间"""
+                            self.browser.find_element_by_xpath("//*[@id=\"date_start\"]").click()
+
+                            # 开始时间整个月份的xpath
+                            start_month = "/html/body/div[6]/div[2]/table/descendant::a"
+
+                            # 定义是否翻页(翻到上个月)，0为不翻页，1为翻页一次，2为翻页两次
+                            btn_prev_month = random.randint(0, 2)
+
+                            if btn_prev_month == 0:
+                                # 不翻页
+                                datelist = BasePage(self.browser).select_every_day(start_month)
+
+                                w = random.randint(0, len(datelist[1])-1)
+                                self.browser.find_elements_by_xpath(start_month)[w].click()
+
+                            elif btn_prev_month == 1:
+                                # 翻到上个月
+                                self.browser.find_element_by_xpath("/html/body/div[6]/div[1]/a[1]").click()
+                                datelist = BasePage(self.browser).select_every_day(start_month)
+
+                                w = random.randint(0, len(datelist[0])-1)
+                                self.browser.find_elements_by_xpath(start_month)[w].click()
+                                # 翻页之后，复位
+                                self.browser.find_element_by_xpath("/html/body/div[6]/div[1]/a[2]").click()
+
+                            elif btn_prev_month == 2:
+                                # 翻到上上月
+                                BasePage(self.browser).double_click("/html/body/div[6]/div[1]/a[1]")
+
+                                datelist = BasePage(self.browser).select_every_day(start_month)
+
+                                w = random.randint(0, len(datelist[0])-1)
+                                self.browser.find_elements_by_xpath(start_month)[w].click()
+                                # 翻页之后，复位
+                                BasePage(self.browser).double_click("/html/body/div[6]/div[1]/a[2]")
+
+                            """自定义结束时间"""
+                            self.browser.find_element_by_xpath("//*[@id=\"date_end\"]").click()
+
+                            # 结束时间整个月份的xpath
+                            end_month = "/html/body/div[7]/div[2]/table/descendant::a"
+
+                            # 定义是否翻页(翻到上个月)，0为不翻页，1为翻页一次，2为翻页两次
+                            btn_prev_month_end = random.randint(0, 2)
+
+                            if btn_prev_month_end == 0:
+                                # 不翻页
+                                datelist = BasePage(self.browser).select_every_day(end_month)
+
+                                w = random.randint(0, len(datelist[1])-1)
+                                self.browser.find_elements_by_xpath(end_month)[w].click()
+
+                            elif btn_prev_month_end == 1:
+                                # 翻到上个月
+                                self.browser.find_element_by_xpath("/html/body/div[7]/div[1]/a[1]").click()
+
+                                datelist = BasePage(self.browser).select_every_day(end_month)
+
+                                w = random.randint(0, len(datelist[0])-1)
+                                self.browser.find_elements_by_xpath(end_month)[w].click()
+                                # 翻页之后，复位
+                                self.browser.find_element_by_xpath("/html/body/div[7]/div[1]/a[2]").click()
+
+                            elif btn_prev_month_end == 2:
+                                # 翻到上上月
+                                BasePage(self.browser).double_click("/html/body/div[7]/div[1]/a[1]")
+
+                                datelist = BasePage(self.browser).select_every_day(end_month)
+
+                                w = random.randint(0, len(datelist[0])-1)
+                                self.browser.find_elements_by_xpath(end_month)[w].click()
+                                # 翻页之后，复位
+                                BasePage(self.browser).double_click("/html/body/div[7]/div[1]/a[2]")
+
+                            # 点击确认按钮
+                            self.browser.find_elements_by_xpath("//*[@id=\"tool\"]/span[1]/div/descendant::a")[j]\
+                                .click()
 
                     except ElementNotVisibleException:
                         # 如果开始时间大于结束时间，本次循环结束，进入下次循环
@@ -179,7 +267,7 @@ class Test(unittest.TestCase):
                 self.browser.find_element_by_xpath("//*[@id=\"search\"]").click()
                 search_tool = self.browser.find_element_by_xpath("//*[@id=\"tool\"]/span[5]/div/form/span/input")
                 search_tool.clear()
-                
+
             except ElementNotVisibleException:
                 print(self.browser.find_element_by_xpath("//*[@id=\"tool\"]/span[5]/div/form/p").text)
                 continue
