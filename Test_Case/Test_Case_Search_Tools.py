@@ -72,8 +72,7 @@ class Test(unittest.TestCase):
 
                 elif j == (total-1):
                     # 设定是输入还是选择，0为输入，1为选择
-                    # k = random.randint(0, 1)
-                    k = 1
+                    k = random.randint(0, 1)
                     try:
                         if k ==0:
                             # 定义时间段： 最近一个月
