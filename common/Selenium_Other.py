@@ -23,6 +23,21 @@ class BasePage(object):
         element1 = self.browser.find_element_by_xpath(loc)
         ActionChains(self.browser).double_click(element1).perform()
 
+    def test_scroll_to_the_bottom(self):
+        u"""滚动到底部"""
+        self.browser.execute_script("var action=document.documentElement.scrollTop=10000")
+        time.sleep(1)
+
+    def test_look_more(self):
+        u"""查看更多"""
+        self.browser.find_element_by_xpath("//*[@id=\"look-more\"]/span").click()
+        time.sleep(1)
+
+    def test_scroll_to_the_top(self):
+        u"""滚动到顶部"""
+        self.browser.execute_script("var action=document.documentElement.scrollTop=0")
+        time.sleep(1)
+
     def close_page(self):
         """关闭新打开的页面"""
         handles = self.browser.window_handles

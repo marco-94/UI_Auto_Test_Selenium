@@ -18,6 +18,7 @@ from selenium.common.exceptions import ElementNotVisibleException
 
 sys.path.append(r'D:\test\Auto_Test\common')
 from Selenium_Other import BasePage
+
 sys.path.append(r'D:\test\Auto_Test\utils')
 from logger import Logger
 
@@ -59,7 +60,7 @@ class Test(unittest.TestCase):
         logger.info("执行测试用例：时间筛选")
         u"""时间筛选"""
         self.browser.find_element_by_xpath("//*[@id=\"query\"]").send_keys("微信")
-        logger.info("搜索框输入关键词“微信”")
+        logger.info("搜索框输入关键词：微信")
 
         self.browser.find_element_by_xpath("//*[@id=\"searchForm\"]/div/input[3]").click()
         logger.info("点击搜索按钮")
@@ -224,7 +225,7 @@ class Test(unittest.TestCase):
     def test_select_type_search(self):
         logger.info("执行测试用例：类型筛选")
         u"""类型筛选"""
-        
+
         self.browser.find_element_by_xpath("//*[@id=\"query\"]").send_keys("微信")
         logger.info("搜索框输入关键词“微信”")
 
@@ -302,7 +303,7 @@ class Test(unittest.TestCase):
 
                 self.browser.find_element_by_xpath("//*[@id=\"tool\"]/span[5]/div/form/span/input"). \
                     send_keys(public_address_list[k])
-                logger.info("输入public_address_list内的公众号信息")
+                logger.info("输入公众号：%s", public_address_list[k])
                 time.sleep(1)
 
                 self.browser.find_element_by_xpath("//*[@id=\"search_enter\"]").click()
@@ -314,13 +315,15 @@ class Test(unittest.TestCase):
 
                 self.browser.find_element_by_xpath("//*[@id=\"search\"]").click()
                 search_tool = self.browser.find_element_by_xpath("//*[@id=\"tool\"]/span[5]/div/form/span/input")
-                logger.info("清除输入信息")
                 search_tool.clear()
+                logger.info("清除输入信息")
 
             except ElementNotVisibleException:
-                print(self.browser.find_element_by_xpath("//*[@id=\"tool\"]/span[5]/div/form/p").text)
                 logger.info("没有找到相应的公众号")
-                continue
+                self.browser.find_element_by_xpath("//*[@id=\"search\"]").click()
+                search_tool = self.browser.find_element_by_xpath("//*[@id=\"tool\"]/span[5]/div/form/span/input")
+                search_tool.clear()
+                logger.info("清除输入信息")
 
 
 if __name__ == '__main__':
