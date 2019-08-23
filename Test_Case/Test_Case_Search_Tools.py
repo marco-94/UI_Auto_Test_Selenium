@@ -86,7 +86,7 @@ class Test(unittest.TestCase):
 
                 if 0 <= j < (total-1):
                     self.browser.find_elements_by_xpath("//*[@id=\"tool\"]/span[1]/div/descendant::a")[j].click()
-                    logger.info("选择非自定义时间段：%s" % self.browser
+                    logger.info("选择非自定义时间段：%s", self.browser
                                 .find_elements_by_xpath("//*[@id=\"tool\"]/span[1]/div/descendant::a")[j]
                                 .get_attribute('text'))
                     time.sleep(1)
