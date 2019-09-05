@@ -5,6 +5,7 @@ author:Shanchi Liang
 import time
 import random
 import datetime
+from utils.logger import Logger
 from selenium.webdriver.common.action_chains import ActionChains
 
 
@@ -13,12 +14,28 @@ class BasePage(object):
     def __init__(self, browser):
         self.browser = browser
 
-    def move_to_element(self, loc):
+    def save_img(self, *loc):
+
+        self.browser.get_screenshot_as_file('{}/{}.png'.format(os.path.abspath("D:/test/Auto_Test/img"), loc))
+        logger.info("保存截图：%s", loc)
+
+    def send_keys(self, *loc):
+        """输入元素"""
+        self.browser.find_element(loc[0], loc[1]).send_keys(loc[2])
+        logger.info("输入关键词：%s", loc[1])
+        time.sleep(1)
+
+    def click(self, *loc):
+        logger.info("点击元素，%s, %s", loc[0], loc[1])
+        self.browser.find_element(loc[0], loc[1]).click()
+        time.sleep(3)
+
+    def move_to_element(self, *loc):
         """鼠标悬停操作"""
         element = self.browser.find_element_by_xpath(loc)
         ActionChains(self.browser).move_to_element(element).perform()
 
-    def double_click(self, loc):
+    def double_click(self, *loc):
         """鼠标双击"""
         element1 = self.browser.find_element_by_xpath(loc)
         ActionChains(self.browser).double_click(element1).perform()
@@ -49,11 +66,12 @@ class BasePage(object):
         self.browser.switch_to.window(handles[0])
         time.sleep(1)
 
-    def get_every_day(self, begin_date, end_date):
+    @staticmethod
+    def get_every_day(*loc):
         """设置输入检索时间"""
         date_list = []
-        begin_date = str(begin_date)
-        end_date = str(end_date)
+        begin_date = str(loc[0])
+        end_date = str(loc[1])
         begin_date = datetime.datetime.strptime(begin_date, "%Y-%m-%d")
         end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d")
         while begin_date <= end_date:
@@ -64,7 +82,7 @@ class BasePage(object):
         j = random.randint(0, (len(date_list) - 1))
         return date_list[i], date_list[j]
 
-    def select_every_day(self, loc):
+    def select_every_day(self, *loc):
         """设置选择检索时间"""
         # 获取当月天数
         date_total = len(self.browser.find_elements_by_xpath(loc))

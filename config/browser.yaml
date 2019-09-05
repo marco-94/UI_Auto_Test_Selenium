@@ -1,0 +1,6 @@
+brwserType:
+  browserName : Chrome
+#  browserName : Firefox
+
+ptahUrl:
+  URL : https://weixin.sogou.com/

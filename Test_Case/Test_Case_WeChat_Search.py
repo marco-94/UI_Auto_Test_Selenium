@@ -7,6 +7,7 @@ import os
 import sys
 import time
 import random
+import logging
 import unittest
 # import pytesseract
 import urllib.request
@@ -17,10 +18,11 @@ from BeautifulReport import BeautifulReport
 # from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import ElementNotVisibleException, WebDriverException, NoSuchElementException
 
-sys.path.append(r'D:\test\Auto_Test\common')
+sys.path.append(r'D:\test\Auto_Test\utils')
+from browser_driver import BrowserDriver
 from Selenium_Other import BasePage
 
-sys.path.append(r'D:\test\Auto_Test\utils')
+sys.path.append(r'D:\test\Auto_Test\common')
 from logger import Logger
 
 logger = Logger("Test_Case_Search_Tools").getlog()
@@ -28,48 +30,26 @@ logger = Logger("Test_Case_Search_Tools").getlog()
 
 class Test(unittest.TestCase):
     url = "https://weixin.sogou.com/"
-    img_path = "D:/test/Auto_Test/img"
-
-    def save_img(self, img_name):
-        self.browser.get_screenshot_as_file('{}/{}.png'.format(os.path.abspath(self.img_path), img_name))
 
     def setUp(self):
-        self.browser = webdriver.Chrome()
-        # self.chrome_options = Options()
-        logger.info("选择的浏览器: %s" % self.browser)
+        browser = BrowserDriver(self)
+        self.browser = browser.open_browser()
 
-        # # 禁止图片加载
-        # prefs = {"profile.managed_default_content_settings.images": 2}
-        # self.chrome_options.add_experimental_option("prefs", prefs)
-
-        # # 设置chrome浏览器无界面模式
-        # self.chrome_options.add_argument('--headless')
-        # self.browser = webdriver.Chrome(options=self.chrome_options)
-
-        self.browser.maximize_window()
         self.browser.get(self.url)
         logger.info("打开的URL为: %s" % self.url)
         time.sleep(3)
         logger.info("页面加载，等待3秒")
 
     def tearDown(self):
-        self.browser.quit()
-        logger.info("关闭浏览器")
+        BrowserDriver(self.browser).quit_browser()
 
     @BeautifulReport.add_test_img('单个关键词指定检索')
     def test_word_only_search(self):
-        logger.info("执行测试用例：单个关键词指定检索")
         u"""单个关键词指定检索"""
 
-        self.browser.find_element_by_xpath("//*[@id=\"query\"]").send_keys("微信")
-        logger.info("搜索框输入关键词：微信")
-
-        self.browser.find_element_by_xpath("//*[@id=\"searchForm\"]/div/input[3]").click()
-        logger.info("点击搜索按钮")
-        time.sleep(2)
-
-        self.save_img('单个关键词指定检索')
-        logger.info("保存截图：单个关键词指定检索")
+        BasePage(self.browser).send_keys("xpath", "//*[@id=\"query\"]", "微信")
+        BasePage(self.browser).click("xpath", "//*[@id=\"searchForm\"]/div/input[3]")
+        BasePage(self.browser).save_img('单个关键词指定检索')
 
     @BeautifulReport.add_test_img('取top10关键词，随机检索', '访问过多')
     def test_word_random_search(self):
@@ -107,11 +87,11 @@ class Test(unittest.TestCase):
                     logger.info("搜索文章：%s", word)
                     time.sleep(3)
 
-                self.save_img('取top10关键词，随机检索')
+                BasePage(self.browser).save_img('取top10关键词，随机检索')
                 logger.info("保存截图：取top10关键词，随机检索")
 
             except NoSuchElementException:
-                self.save_img('访问过多')
+                BasePage(self.browser).save_img('访问过多')
                 logger.info("保存截图：访问过多")
 
     @BeautifulReport.add_test_img('点击top榜单话题随机检索')
@@ -126,7 +106,7 @@ class Test(unittest.TestCase):
             logger.info("点击话题：%s", self.browser.find_elements_by_xpath("//*[@id=\"topwords\"]/descendant::a")[j]
                         .get_attribute('text'))
 
-            self.save_img('点击top榜单话题随机检索')
+            BasePage(self.browser).save_img('点击top榜单话题随机检索')
             logger.info("保存截图：点击top榜单话题随机检索")
 
             BasePage(self.browser).close_page()
@@ -145,7 +125,7 @@ class Test(unittest.TestCase):
                 logger.info("点击tab：%s", self.browser.find_elements_by_xpath("//*[@id=\"type_tab\"]/descendant::a")[j]
                             .get_attribute('text'))
 
-                self.save_img('切换tab检索')
+                BasePage(self.browser).save_img('切换tab检索')
                 logger.info("保存截图：切换tab检索")
 
             elif 11 < j < 20:
@@ -156,7 +136,7 @@ class Test(unittest.TestCase):
                 logger.info("点击tab：%s", self.browser.find_elements_by_xpath("//*[@id=\"type_tab\"]/descendant::a")[j]
                             .get_attribute('text'))
 
-                self.save_img('切换更多tab检索')
+                BasePage(self.browser).save_img('切换更多tab检索')
                 logger.info("保存截图：切换更多tab检索")
 
     @BeautifulReport.add_test_img('滚动图片选择检索')
@@ -177,7 +157,7 @@ class Test(unittest.TestCase):
 
                 time.sleep(3)
 
-                self.save_img('滚动图片选择检索')
+                BasePage(self.browser).save_img('滚动图片选择检索')
                 logger.info("保存截图：滚动图片选择检索")
 
                 BasePage(self.browser).close_page()
@@ -212,7 +192,7 @@ class Test(unittest.TestCase):
             BasePage(self.browser).close_page()
             logger.info("关闭详情页面")
 
-            self.save_img('图片话题切换检索')
+            BasePage(self.browser).save_img('图片话题切换检索')
             logger.info("保存截图：图片话题切换检索")
 
     @BeautifulReport.add_test_img('查看文章详情')
@@ -232,7 +212,7 @@ class Test(unittest.TestCase):
 
             time.sleep(3)
 
-            self.save_img('查看文章详情')
+            BasePage(self.browser).save_img('查看文章详情')
             logger.info("保存截图：查看文章详情")
 
             BasePage(self.browser).close_page()
