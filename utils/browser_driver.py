@@ -17,6 +17,7 @@ logger = Logger("browser_driver").getlog()
 class BrowserDriver(object):
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     chrome_driver_path = os.path.join(BASE_DIR, r"drivers\chromedriver.exe")
+    url = "https://weixin.sogou.com/"
 
     def __init__(self, browser):
         self.browser = browser
@@ -24,8 +25,6 @@ class BrowserDriver(object):
     def open_browser(self):
         """启动浏览器"""
         logger.info("启动chrome浏览器")
-        self.browser = webdriver.Chrome(self.chrome_driver_path)
-        # self.chrome_options = Options(self.chrome_driver_path)
 
         # 禁止图片加载
         # prefs = {"profile.managed_default_content_settings.images": 2}
@@ -37,6 +36,10 @@ class BrowserDriver(object):
 
         self.browser.maximize_window()
         time.sleep(3)
+        self.browser.get(self.url)
+        logger.info("打开的URL为: %s" % self.url)
+        time.sleep(3)
+        logger.info("页面加载，等待3秒")
 
     def quit_browser(self):
         """关闭浏览器"""

@@ -2,11 +2,17 @@
 """
 author:Shanchi Liang
 """
+import os
+import sys
 import time
 import random
 import datetime
-from utils.logger import Logger
 from selenium.webdriver.common.action_chains import ActionChains
+
+sys.path.append(r'D:\test\Auto_Test\common')
+from logger import Logger
+
+logger = Logger("Selenium_Other").getlog()
 
 
 class BasePage(object):
@@ -20,9 +26,8 @@ class BasePage(object):
         logger.info("保存截图：%s", loc)
 
     def send_keys(self, *loc):
-        """输入元素"""
+        logger.info("输入元素：%s", loc[1])
         self.browser.find_element(loc[0], loc[1]).send_keys(loc[2])
-        logger.info("输入关键词：%s", loc[1])
         time.sleep(1)
 
     def click(self, *loc):
@@ -30,8 +35,14 @@ class BasePage(object):
         self.browser.find_element(loc[0], loc[1]).click()
         time.sleep(3)
 
+    def clicks(self, *loc):
+        logger.info("点击元素，%s, %s, %s", loc[0], loc[1], loc[2])
+        self.browser.find_elements(loc[0], loc[1])[loc[2]].click()
+        time.sleep(3)
+
     def move_to_element(self, *loc):
         """鼠标悬停操作"""
+        logger.info('鼠标悬停在元素: %s' % loc)
         element = self.browser.find_element_by_xpath(loc)
         ActionChains(self.browser).move_to_element(element).perform()
 
@@ -56,7 +67,7 @@ class BasePage(object):
         time.sleep(1)
 
     def close_page(self):
-        """关闭新打开的页面"""
+        logger.info("关闭新打开的页面")
         handles = self.browser.window_handles
         self.browser.switch_to.window(handles[1])
         time.sleep(1)
