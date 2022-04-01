@@ -6,6 +6,7 @@
 <li>Python3</li>
 <li>Selenium</li>
 <li>BeautifulSoap</li>
+<li>xpath</li>
 <li>BeautifulReport</li>
 <li>Unittest</li>
 
